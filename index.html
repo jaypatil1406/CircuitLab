@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="CircuitLab - learn how simple electric circuits work."
+    />
+    <title>CircuitLab | Simple Circuit Simulation</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/board.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="CircuitLab home">
+        <span class="brand-mark" aria-hidden="true">CL</span
+        ><span data-app-title>CircuitLab</span>
+      </a>
+      <nav aria-label="Lab levels">
+        <ol id="level-nav" class="level-nav"></ol>
+      </nav>
+      <div class="top-actions">
+        <output id="header-tries" aria-label="Total attempts"
+          >Attempts: 0</output
+        >
+        <button class="button button-quiet" id="help-button" type="button">
+          Help
+        </button>
+      </div>
+    </header>
+
+    <main id="app-main" class="app-main">
+      <div id="error-box" class="error-box" role="alert" hidden></div>
+
+      <section
+        id="lab-view"
+        class="lab-layout"
+        aria-label="Circuit building lab"
+      >
+        <aside class="palette-panel panel">
+          <h2 id="palette-heading">Parts</h2>
+          <p class="muted small" id="palette-hint">
+            Drag a part onto a dotted slot.
+          </p>
+          <div id="palette-list" class="palette-list"></div>
+        </aside>
+
+        <section class="work-area" aria-label="Circuit board">
+          <div class="board-heading">
+            <span id="level-kicker">LEVEL 1</span>
+            <h1 id="level-title">Light it up</h1>
+          </div>
+          <div id="board" class="board" aria-label="Circuit board">
+            <svg
+              class="wiring"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                class="wire-path"
+                d="M 12 50 L 12 20 L 50 20 L 88 20 L 88 50 L 88 80 L 50 80 L 12 80 Z"
+              ></path>
+              <path
+                class="current-path"
+                d="M 12 50 L 12 20 L 50 20 L 88 20 L 88 50 L 88 80 L 50 80 L 12 80 Z"
+              ></path>
+            </svg>
+            <div id="slot-layer" class="slot-layer"></div>
+            <div id="placed-layer" class="placed-layer"></div>
+            <div id="board-hint" class="board-hint">
+              Build a complete circuit
+            </div>
+          </div>
+          <div class="board-footer">
+            <span id="build-status" role="status" aria-live="polite"
+              >Place every required part to begin.</span
+            >
+            <span id="level-progress" class="small muted"></span>
+          </div>
+        </section>
+
+        <aside id="status-panel" class="status-panel panel">
+          <span class="eyebrow">YOUR TASK</span>
+          <h2 id="task-title">Level 1 · Light it up</h2>
+          <p id="task-goal">Complete the loop so the bulb glows.</p>
+          <div id="feedback" class="feedback" role="status" aria-live="polite">
+            Drag the parts into the dotted slots, then press Test Circuit.
+          </div>
+          <button
+            class="button button-primary button-full"
+            id="test-button"
+            type="button"
+            disabled
+          >
+            Test Circuit
+          </button>
+          <button
+            class="button button-secondary button-full"
+            id="switch-button"
+            type="button"
+            aria-pressed="false"
+            hidden
+          >
+            Switch: OFF
+          </button>
+          <button
+            class="button button-secondary button-full"
+            id="quiz-button"
+            type="button"
+            disabled
+          >
+            Knowledge check
+          </button>
+          <button
+            class="button button-secondary button-full"
+            id="reset-level-button"
+            type="button"
+          >
+            Reset level
+          </button>
+
+          <div id="material-progress-wrap" hidden>
+            <label for="material-progress">Materials tested</label>
+            <progress id="material-progress" max="5" value="0">0 of 5</progress>
+            <p id="material-progress-label" class="small muted">
+              0 of 5 tested
+            </p>
+            <div class="classification">
+              <div>
+                <strong>Conductors</strong>
+                <ul id="conductors-list"></ul>
+              </div>
+              <div>
+                <strong>Insulators</strong>
+                <ul id="insulators-list"></ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section
+        id="quiz-view"
+        class="quiz-view"
+        hidden
+        aria-labelledby="quiz-heading"
+      >
+        <div class="quiz-card panel">
+          <div class="quiz-meta">
+            <span id="quiz-level-label" class="eyebrow">LEVEL 1 COMPLETE</span>
+            <span id="quiz-count" class="muted small">Question 1 of 3</span>
+          </div>
+          <h1 id="quiz-heading">Knowledge check</h1>
+          <form id="quiz-form">
+            <fieldset id="quiz-fieldset">
+              <legend id="question-text"></legend>
+              <div id="question-options" class="question-options"></div>
+            </fieldset>
+            <p id="quiz-hint" class="muted small">
+              Choose your answer, then press Submit.
+            </p>
+            <div
+              id="quiz-feedback"
+              class="feedback"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></div>
+            <div class="quiz-actions">
+              <button
+                id="quiz-submit"
+                class="button button-primary"
+                type="submit"
+                disabled
+              >
+                Submit
+              </button>
+              <button
+                id="next-level-button"
+                class="button button-primary"
+                type="button"
+                hidden
+              >
+                Go to next level
+              </button>
+              <button
+                id="report-button"
+                class="button button-primary"
+                type="button"
+                hidden
+              >
+                See lab report
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section
+        id="report-view"
+        class="report-view"
+        hidden
+        aria-labelledby="report-heading"
+      >
+        <div class="report-banner">
+          <div>
+            <span class="eyebrow">CIRCUITLAB SUMMARY</span>
+            <h1 id="report-heading">Lab report</h1>
+            <p id="report-subtitle">Your results from all three levels.</p>
+          </div>
+          <div class="score">
+            <strong id="total-score">0%</strong
+            ><span id="pass-label">Not passed</span>
+          </div>
+        </div>
+        <div class="report-grid">
+          <div class="panel report-table-wrap">
+            <table id="report-table">
+              <caption>
+                Results by level
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Level</th>
+                  <th scope="col">Tries</th>
+                  <th scope="col">Knowledge check</th>
+                </tr>
+              </thead>
+              <tbody id="report-body"></tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <h2>What you found</h2>
+            <div class="found-columns">
+              <div>
+                <strong>Conductors</strong>
+                <ul id="report-conductors"></ul>
+              </div>
+              <div>
+                <strong>Insulators</strong>
+                <ul id="report-insulators"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="report-actions">
+          <button
+            id="restart-button"
+            class="button button-primary"
+            type="button"
+          >
+            Restart lab
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>CircuitLab · Explore, build, test.</span
+      ><span>Learning by doing</span>
+    </footer>
+
+    <dialog id="intro-dialog" class="intro-dialog">
+      <form method="dialog" class="dialog-content">
+        <span class="eyebrow">WELCOME TO THE LAB</span>
+        <h1>Build circuits that work</h1>
+        <p>
+          Three short levels. Build each circuit, test it, then answer one quick
+          question to unlock the next level.
+        </p>
+        <ol>
+          <li>Drag a part from the left into a dotted slot.</li>
+          <li>
+            Click × on a placed part to remove it, or drop another part to swap.
+          </li>
+          <li>Press Test Circuit. Find the fault, fix it, and try again.</li>
+        </ol>
+        <button
+          id="start-button"
+          class="button button-primary button-full"
+          value="start"
+        >
+          Start Level 1
+        </button>
+      </form>
+    </dialog>
+  </body>
+</html>
