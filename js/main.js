@@ -202,7 +202,6 @@ function startDrag(event, partKey, paletteRow) {
 function moveDraggedPart(event) {
   if (!dragState) return;
 
-  // Keep the preview close to the cursor. pointer-events:none lets us detect slots underneath.
   dragState.preview.style.left = `${event.clientX + 12}px`;
   dragState.preview.style.top = `${event.clientY + 12}px`;
 
@@ -225,7 +224,6 @@ function finishDrag(event) {
     .forEach((slot) => slot.classList.remove("is-active"));
   dragState = null;
 
-  // If the pointer was released outside a slot, leave the part in the palette.
   if (!target) return;
 
   const slotId = target.dataset.slot;
@@ -254,7 +252,6 @@ function finishDrag(event) {
     setPaletteState(oldPart, "Available", false);
   }
 
-  // A part may only be used once, so remove it from its previous slot if needed.
   for (const [otherSlotId, otherPart] of currentLevel.placedParts.entries()) {
     if (otherPart === state.partKey) {
       currentLevel.placedParts.delete(otherSlotId);
